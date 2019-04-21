@@ -53,9 +53,32 @@ class MainActivity : AppCompatActivity() {
         player.addListener(PlayListener())
     }
 
+    override fun onResume() {
+        super.onResume()
+        resumeExoPlayer()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pauseExoplayer()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        releaseExoPlayer()
+    }
+
+    private fun pauseExoplayer() {
+        player.playWhenReady = false
+        mResumePosition = player.currentPosition
+    }
+
+    private fun releaseExoPlayer() {
         player.release()
+    }
+
+    private fun resumeExoPlayer() {
+        player.seekTo(mResumePosition)
     }
 
     private fun buildMediaSource(context: Context, uri: Uri): MediaSource {
