@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.view.View
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.MediaSource
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_mp4_player.*
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
@@ -18,7 +18,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 
 
-class MainActivity : AppCompatActivity() {
+class MP4PlayerActivity : AppCompatActivity() {
 
     companion object {
         const val URL = "http://demos.webmproject.org/exoplayer/glass.mp4"
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_mp4_player)
 
         //player = ExoPlayerFactory.newSimpleInstance(this)
         player = ExoPlayerFactory.newSimpleInstance(
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        pauseExoplayer()
+        pauseExoPlayer()
     }
 
     override fun onDestroy() {
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         releaseExoPlayer()
     }
 
-    private fun pauseExoplayer() {
+    private fun pauseExoPlayer() {
         player.playWhenReady = false
         mResumePosition = player.currentPosition
     }
@@ -79,14 +79,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun resumeExoPlayer() {
         player.seekTo(mResumePosition)
-    }
-
-    private fun buildMediaSource(context: Context, uri: Uri): MediaSource {
-        // Produces DataSource instances through which media data is loaded.
-        val dataSourceFactory =
-            DefaultDataSourceFactory(context, Util.getUserAgent(context, "ExoPlayerSample"))
-        // This is the MediaSource representing the media to be played.
-        return ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
     }
 
     private fun buildMediaSourceMP4(context: Context, uri: Uri): MediaSource {
