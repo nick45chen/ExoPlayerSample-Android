@@ -1,56 +1,37 @@
 package net.nickchen450.exoplayersample
 
-import android.content.Context
 import android.net.Uri
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.source.MediaSource
-import kotlinx.android.synthetic.main.activity_mp4_player.*
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.TrackGroupArray
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
+import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import kotlinx.android.synthetic.main.activity_media_player.*
 
 
-class MP4PlayerActivity : AppCompatActivity() {
+class MediaPlayerActivity : AppCompatActivity() {
 
     companion object {
-        const val URL = "http://demos.webmproject.org/exoplayer/glass.mp4"
+        private const val URL_MP4 = "http://demos.webmproject.org/exoplayer/glass.mp4"
+        private const val URL_MP3 = "https://audionautix.com/Music/Limosine.mp3"
     }
 
     private lateinit var player: SimpleExoPlayer
-    private val bandwidthMeter by lazy {
-        DefaultBandwidthMeter()
-    }
-
-    private val adaptiveTrackSelectionFactory by lazy {
-        AdaptiveTrackSelection.Factory(bandwidthMeter)
-    }
     private var mResumePosition = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_mp4_player)
-
-        //player = ExoPlayerFactory.newSimpleInstance(this)
-        player = ExoPlayerFactory.newSimpleInstance(
-            this,
-            DefaultRenderersFactory(this),
-            DefaultTrackSelector(adaptiveTrackSelectionFactory),
-            DefaultLoadControl()
-        )
-        player_view.player = player
-
-        player.seekToDefaultPosition()
-        player.prepare(buildMediaSourceMP4(this, Uri.parse(URL)))
+        setContentView(R.layout.activity_media_player)
+        player = buildMediaSource()
         player.playWhenReady = true
         player.addListener(PlayListener())
+
+        player_view.player = player
     }
 
     override fun onResume() {
@@ -81,13 +62,19 @@ class MP4PlayerActivity : AppCompatActivity() {
         player.seekTo(mResumePosition)
     }
 
-    private fun buildMediaSourceMP4(context: Context, uri: Uri): MediaSource {
-        val dataSourceFactory = DefaultDataSourceFactory(
-            context,
-            Util.getUserAgent(context, "ExoPlayerSample"),
-            bandwidthMeter
-        )
-        return ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
+    private fun buildMediaSource(): SimpleExoPlayer {
+        // Preparing the player
+
+        // Produces DataSource instances through which media data is loaded.
+        val factory: DataSource.Factory =
+            DefaultDataSourceFactory(this, Util.getUserAgent(this, "yourApplicationName"))
+        // This is the MediaSource representing the media to be played.
+        val videoSource =
+            ExtractorMediaSource.Factory(factory).createMediaSource(Uri.parse(URL_MP3))
+        //
+        val simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(this)
+        simpleExoPlayer.prepare(videoSource)
+        return simpleExoPlayer
     }
 
     inner class PlayListener : Player.EventListener {
@@ -141,4 +128,5 @@ class MP4PlayerActivity : AppCompatActivity() {
             }
         }
     }
+
 }
