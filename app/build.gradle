@@ -41,4 +41,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     // ExoPlayer(Full ver.)
     implementation "com.google.android.exoplayer:exoplayer:$versions.exoplayer"
+    implementation project(path: ':player')
 }
