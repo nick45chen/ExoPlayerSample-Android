@@ -11,10 +11,12 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
-import kotlinx.android.synthetic.main.activity_media_player.*
+import kotlinx.android.synthetic.main.activity_exoplayer.*
 
-
-class MediaPlayerActivity : AppCompatActivity() {
+/**
+ * 使用原生 ExoPlayer & Controller bar
+ * */
+class ExoPlayerActivity : AppCompatActivity() {
 
     companion object {
         private const val URL_MP4 = "http://demos.webmproject.org/exoplayer/glass.mp4"
@@ -26,7 +28,7 @@ class MediaPlayerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_media_player)
+        setContentView(R.layout.activity_exoplayer)
         player = buildMediaSource()
         player.playWhenReady = true
         player.addListener(PlayListener())
