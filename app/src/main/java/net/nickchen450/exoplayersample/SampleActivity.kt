@@ -95,4 +95,9 @@ class SampleActivity : AppCompatActivity() {
         val hour = durationInMillis / (1000 * 60 * 60) % 24
         return String.format("%02d:%02d:%02d", hour, minute, second)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        ui_media_controller_view.release()
+    }
 }
